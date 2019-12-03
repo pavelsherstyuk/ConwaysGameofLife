@@ -27,10 +27,10 @@ public class GameView extends JPanel implements MouseListener, MouseMotionListen
     public void paint(Graphics g) {
         super.paint(g);
 
-        int cellWidth = this.getWidth() / gWidth;
-        int cellHeight = this.getHeight() / gHeight;
-//        double cellWidth = (double)this.getWidth() / gWidth;
-//        double cellHeight = (double)this.getHeight() / gHeight;
+//        int cellWidth = this.getWidth() / gWidth;
+//        int cellHeight = this.getHeight() / gHeight;
+        double cellWidth = (double)this.getWidth() / gWidth;
+        double cellHeight = (double)this.getHeight() / gHeight;
 
         Cell cell;
         for (int x = 0; x < gWidth; x++) {
@@ -41,8 +41,9 @@ public class GameView extends JPanel implements MouseListener, MouseMotionListen
                 else
                     g.setColor(Color.WHITE);
 
-                g.fillRect(x*cellWidth, y*cellHeight, cellWidth, cellHeight);
-//                g.fillRect((int)(cellWidth*x), (int)(cellHeight*y), (int)cellWidth, (int)cellHeight);
+//                g.fillRect(x*cellWidth, y*cellHeight, cellWidth, cellHeight);
+                g.fillRect((int)(cellWidth*x + 0.5), (int)(cellHeight*y + 0.5),
+                        (int)(cellWidth + 0.5), (int)(cellHeight + 0.5));
             }
         }
     }

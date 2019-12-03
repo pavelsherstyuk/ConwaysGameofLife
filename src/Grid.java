@@ -4,6 +4,7 @@ public class Grid {
     private int lowSurviveThreshold, highSurviveThreshold;
     private int lowBirthThreshold, highBirthThreshold;
     private boolean torus;
+    private double rndCutoff;
 
     public void setupGrid(int width, int height) {
         this.width = width;
@@ -21,6 +22,7 @@ public class Grid {
         highSurviveThreshold = 3;
 
         torus = false;
+        rndCutoff = 0.5;
     }
 
     public int getWidth() {
@@ -46,7 +48,7 @@ public class Grid {
     public void randomGrid() {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                grid[x][y].setAlive(Math.random() < 0.5);
+                grid[x][y].setAlive(Math.random() < rndCutoff);
             }
         }
     }

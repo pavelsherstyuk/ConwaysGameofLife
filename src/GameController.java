@@ -1,6 +1,8 @@
-public class GameController implements Runnable {
+public class GameController implements Runnable, CellListener {
     private Grid modelGrid;
     private GameView gameView;
+    private Cell tmpCell;
+    private boolean setFlag;
 
     private boolean run;
     private int UPDATES_PER_SECOND = 1;
@@ -10,6 +12,7 @@ public class GameController implements Runnable {
         this.gameView = gameView;
         modelGrid.setupGrid(10, 10);
         gameView.updateGrid(modelGrid.getGrid());
+        gameView.setCellListener(this);
         run = false;
     }
 
@@ -74,5 +77,34 @@ public class GameController implements Runnable {
     public void random() {
         modelGrid.randomGrid();
         gameView.repaint();
+    }
+
+    @Override
+    public void CellPressed(Cell cell) {
+        if (cell == null)
+            cell = tmpCell;
+        cell.toggle();
+        tmpCell = cell;
+        setFlag = cell.isAlive();
+        gameView.repaint();
+    }
+
+    @Override
+    public void CellDragged(Cell cell) {
+        if (cell == null)
+            cell = tmpCell;
+        if (cell != tmpCell) {
+            tmpCell = cell;
+            if (setFlag)
+                cell.setAlive(true);
+            else
+                cell.setAlive(false);
+            gameView.repaint();
+        }
+    }
+
+    @Override
+    public void CellReleased(Cell cell) {
+        tmpCell = null;
     }
 }

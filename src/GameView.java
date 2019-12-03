@@ -7,13 +7,16 @@ import java.awt.event.MouseMotionListener;
 public class GameView extends JPanel implements MouseListener, MouseMotionListener {
     private Cell[][] grid;
     private int gWidth, gHeight;
-    private Cell tmpCell;
-    private boolean setFlag;
+    private CellListener cellListener;
 
     public GameView(int width, int height) {
         this.setPreferredSize(new Dimension(width, height));
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
+    }
+
+    public void setCellListener(CellListener l) {
+        cellListener = l;
     }
 
     public void updateGrid(Cell[][] grid) {
@@ -49,35 +52,23 @@ public class GameView extends JPanel implements MouseListener, MouseMotionListen
         int x = e.getX() * gWidth / this.getWidth();
         int y = e.getY() * gHeight / this.getHeight();
         if (x < 0 || x >= gWidth || y < 0 || y >= gHeight)
-            return tmpCell;
+            return null;
         return grid[x][y];
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        Cell cell = getCell(e);
-        cell.toggle();
-        tmpCell = cell;
-        setFlag = cell.isAlive();
-        repaint();
+        cellListener.CellPressed(getCell(e));
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        Cell cell = getCell(e);
-        if (cell != tmpCell) {
-            tmpCell = cell;
-            if (setFlag)
-                cell.setAlive(true);
-            else
-                cell.setAlive(false);
-            repaint();
-        }
+        cellListener.CellDragged(getCell(e));
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        tmpCell = null;
+        cellListener.CellReleased(getCell(e));
     }
 
     @Override

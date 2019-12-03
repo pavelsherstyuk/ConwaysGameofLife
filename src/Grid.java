@@ -3,6 +3,7 @@ public class Grid {
     private Cell[][] grid;
     private int lowSurviveThreshold, highSurviveThreshold;
     private int lowBirthThreshold, highBirthThreshold;
+    private boolean torus;
 
     public void setupGrid(int width, int height) {
         this.width = width;
@@ -18,6 +19,8 @@ public class Grid {
         highBirthThreshold = 3;
         lowSurviveThreshold = 2;
         highSurviveThreshold = 3;
+
+        torus = false;
     }
 
     public int getWidth() {
@@ -71,6 +74,10 @@ public class Grid {
         highSurviveThreshold = highSurvival;
     }
 
+    public void setTorus(boolean torus) {
+        this.torus = torus;
+    }
+
     public void updateGrid() {
         Cell[][] newGrid = new Cell[width][height];
         for (int x = 0; x < width; x++) {
@@ -81,22 +88,81 @@ public class Grid {
                 // [8] [1] [2]
                 // [7] [ ] [3]
                 // [6] [5] [4]
-                if (y > 0 && grid[x][y-1].isAlive()) // [1]
+                if (y > 0) {                            //[1]
+                    if (grid[x][y - 1].isAlive())
+                        aliveNeighbours++;
+                } else if (torus && grid[x][height-1].isAlive())
                     aliveNeighbours++;
-                if ((x < width-1 && y > 0) && grid[x+1][y-1].isAlive()) // [2]
+
+                if (x < width - 1 && y > 0) {           //[2]
+                    if (grid[x + 1][y - 1].isAlive())
+                        aliveNeighbours++;
+                } else if (torus) {
+                    int i = x + 1, j = y - 1;
+                    if (x == width - 1)
+                        i = 0;
+                    if (y == 0)
+                        j = height - 1;
+                    if (grid[i][j].isAlive())
+                        aliveNeighbours++;
+                }
+
+                if (x < width - 1) {                    //[3]
+                    if (grid[x + 1][y].isAlive())
+                        aliveNeighbours++;
+                } else if (torus && grid[0][y].isAlive())
                     aliveNeighbours++;
-                if (x < width-1 && grid[x+1][y].isAlive()) // [3]
-                     aliveNeighbours++;
-                if ((x < width-1 && y < height-1) && grid[x+1][y+1].isAlive()) // [4]
+
+                if (x < width - 1 && y < height - 1) {  //[4]
+                    if (grid[x + 1][y + 1].isAlive())
+                        aliveNeighbours++;
+                } else if (torus) {
+                    int i = x + 1, j = y + 1;
+                    if (x == width - 1)
+                        i = 0;
+                    if (y == height - 1)
+                        j = 0;
+                    if (grid[i][j].isAlive())
+                        aliveNeighbours++;
+                }
+
+                if (y < height - 1) {                   //[5]
+                    if (grid[x][y + 1].isAlive())
+                        aliveNeighbours++;
+                } else if (torus && grid[x][0].isAlive())
                     aliveNeighbours++;
-                if (y < height-1 && grid[x][y+1].isAlive()) // [5]
+
+                if (x > 0 && y < height - 1) {          //[6]
+                    if (grid[x - 1][y + 1].isAlive())
+                        aliveNeighbours++;
+                } else if (torus) {
+                    int i = x - 1, j = y + 1;
+                    if (x == 0)
+                        i = width - 1;
+                    if (y == height - 1)
+                        j = 0;
+                    if (grid[i][j].isAlive())
+                        aliveNeighbours++;
+                }
+
+                if (x > 0) {                            //[7]
+                    if (grid[x - 1][y].isAlive())
+                        aliveNeighbours++;
+                } else if (torus && grid[width-1][y].isAlive())
                     aliveNeighbours++;
-                if ((x > 0 && y < height-1) && grid[x-1][y+1].isAlive()) // [6]
-                    aliveNeighbours++;
-                if (x > 0 && grid[x-1][y].isAlive()) // [7]
-                    aliveNeighbours++;
-                if ((x > 0 && y > 0) && grid[x-1][y-1].isAlive()) // [8]
-                    aliveNeighbours++;
+
+                if (x > 0 && y > 0) {                   //[8]
+                    if (grid[x - 1][y - 1].isAlive())
+                        aliveNeighbours++;
+                } else if (torus) {
+                    int i = x - 1, j = y - 1;
+                    if (x == 0)
+                        i = width - 1;
+                    if (y == 0)
+                        j = height - 1;
+                    if (grid[i][j].isAlive())
+                        aliveNeighbours++;
+                }
 
                 // Interactions
 //                System.out.println(grid[x][y] + " " + aliveNeighbours);

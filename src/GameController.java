@@ -30,6 +30,10 @@ public class GameController implements Runnable {
         modelGrid.setThresholds(lowBirth, highBirth, lowSurvival, highSurvival);
     }
 
+    public void setTorus(boolean torus) {
+        modelGrid.setTorus(torus);
+    }
+
     public void setUPS(int updatesPerSecond) {
         UPDATES_PER_SECOND = updatesPerSecond;
     }

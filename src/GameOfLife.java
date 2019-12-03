@@ -48,6 +48,9 @@ public class GameOfLife {
         JButton stepButton = new JButton("Step");
         stepButton.addActionListener(e -> gameController.step());
 
+        JToggleButton torusButton = new JToggleButton("Torus");
+        torusButton.addActionListener(e -> gameController.setTorus(torusButton.isSelected()));
+
         JButton resetButton = new JButton("Reset");
         resetButton.addActionListener(e -> gameController.reset());
 
@@ -60,6 +63,7 @@ public class GameOfLife {
         controlPanel.add(stopButton);
         controlPanel.add(stepButton);
         controlPanel.add(toolKitButton);
+        controlPanel.add(torusButton);
         controlPanel.add(resetButton);
         controlPanel.add(randomButton);
         frame.add(controlPanel, BorderLayout.SOUTH);
@@ -113,6 +117,9 @@ public class GameOfLife {
             } catch (Exception ignore) {
                 System.err.println("Incorrect input");
             }
+            gameController.stop();
+            upsSlider.setVisible(false);
+            gameThread = null;
             gameController.resizeGrid(width, height);
             gameController.setThresholds(lowB, highB, lowS, highS);
             toolKit.setVisible(false);

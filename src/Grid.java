@@ -3,8 +3,8 @@ public class Grid {
     private Cell[][] grid;
     private int lowSurviveThreshold, highSurviveThreshold;
     private int lowBirthThreshold, highBirthThreshold;
-    private boolean torus;
     private double rndCutoff;
+    private boolean torus;
 
     public void setupGrid(int width, int height) {
         this.width = width;

@@ -105,6 +105,7 @@ public class GameOfLife {
                 "Any live cell with two or three live neighbours lives on to the next generation.\n" +
                 "Any live cell with more than three live neighbours dies, as if by overpopulation.\n" +
                 "Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.");
+
         JTextPane aboutGrid = new JTextPane();
         aboutGrid.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 18));
         aboutGrid.setEditable(false);
@@ -112,6 +113,7 @@ public class GameOfLife {
                 "White cell = dead\nBlack cell = alive\n" +
                 "Click on a dead cell to set it alive and vice versa\n" +
                 "Drag mouse starting from a dead cell to continuously set cells alive, from alive cell - to set dead");
+
         JTextPane aboutControls = new JTextPane();
         aboutControls.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 18));
         aboutControls.setEditable(false);
@@ -125,6 +127,7 @@ public class GameOfLife {
         JTextPane aboutToolKit = new JTextPane();
         aboutToolKit.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 18));
         aboutToolKit.setEditable(false);
+
         aboutToolKit.setText("[How to: Tools]\n" +
                 "Tools allow user to manipulate the grid.\n" +
                 "First option is resizing the grid without resetting the it (previous state is saved).\n" +

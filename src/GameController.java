@@ -48,6 +48,7 @@ public class GameController implements Runnable {
                 gameView.updateGrid(modelGrid.getGrid());
             }
         }
+
         Thread.currentThread().interrupt();
     }
 

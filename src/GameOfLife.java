@@ -3,18 +3,26 @@ import java.awt.*;
 
 public class GameOfLife {
     private Thread gameThread;
+
     public GameOfLife() {
         JFrame frame = new JFrame("Conway's Game of Life");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setLayout(new BorderLayout());
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        JFrame fullFrame = new JFrame("Conway's Game of Life");
+        fullFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        fullFrame.setResizable(false);
+        fullFrame.setLayout(new BorderLayout());
+        fullFrame.setUndecorated(true);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        fullFrame.setPreferredSize(screenSize);
 
         // Game panel
         Grid grid = new Grid();
         GameView gameView = new GameView(
-                (int)((double)dim.height * 0.9 / 100 + 0.5) * 100,
-                (int)((double)dim.height * 0.9 / 100 + 0.5) * 100);
+                (int)((double)screenSize.height * 0.8 / 50 + 0.5) * 50,
+                (int)((double)screenSize.height * 0.8 / 50 + 0.5) * 50);
         frame.add(gameView, BorderLayout.NORTH);
         GameController gameController = new GameController(grid, gameView);
 
@@ -73,6 +81,34 @@ public class GameOfLife {
         });
 
         JPanel controlPanel = new JPanel(new FlowLayout());
+
+        JToggleButton fullscreenButton = new JToggleButton("Fullscreen");
+        fullscreenButton.addActionListener(e -> {
+            stepButton.doClick();
+            if (fullscreenButton.isSelected()) {
+                frame.setVisible(false);
+                gameView.setPreferredSize(new Dimension(
+                        screenSize.width,
+                        screenSize.height - controlPanel.getHeight()));
+                gameController.resizeGrid((int)(((double)screenSize.width/screenSize.height) * gameController.getGridHeight() + 0.5),
+                        gameController.getGridHeight());
+                fullFrame.add(gameView, BorderLayout.NORTH);
+                fullFrame.add(controlPanel, BorderLayout.EAST);
+                fullFrame.pack();
+                fullFrame.setVisible(true);
+            } else {
+                fullFrame.setVisible(false);
+                gameView.setPreferredSize(new Dimension(
+                        (int)((double)screenSize.height * 0.8 / 50 + 0.5) * 50,
+                        (int)((double)screenSize.height * 0.8 / 50 + 0.5) * 50));
+                gameController.resizeGrid(gameController.getGridHeight(), gameController.getGridHeight());
+                frame.add(gameView, BorderLayout.NORTH);
+                frame.add(controlPanel, BorderLayout.SOUTH);
+                frame.pack();
+                frame.setVisible(true);
+            }
+        });
+
         controlPanel.add(startButton);
         controlPanel.add(upsSlider);
         controlPanel.add(stopButton);
@@ -82,12 +118,13 @@ public class GameOfLife {
         controlPanel.add(resetButton);
         controlPanel.add(randomButton);
         controlPanel.add(aboutButton);
+        controlPanel.add(fullscreenButton);
         frame.add(controlPanel, BorderLayout.SOUTH);
 
         // Frame setup
         frame.pack();
-        frame.setLocation((dim.width - frame.getWidth())/2,
-                (dim.height - frame.getHeight())/2);
+        frame.setLocation((screenSize.width - frame.getWidth())/2,
+                (screenSize.height - frame.getHeight())/2);
         frame.setVisible(true);
 
         //About menu
@@ -123,7 +160,8 @@ public class GameOfLife {
                 "Step button: pauses simulation and progresses by steps.\n" +
                 "Torus toggle: wraps the borders around, creating closed space.\n" +
                 "Reset button: sets all cells to dead state.\n" +
-                "Random button: resets the grid and randomly sets alive cells with 50% chance.");
+                "Random button: resets the grid and randomly sets alive cells with 50% chance.\n" +
+                "Fullscreen toggle: toggles the fullscreen option.");
         JTextPane aboutToolKit = new JTextPane();
         aboutToolKit.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 18));
         aboutToolKit.setEditable(false);

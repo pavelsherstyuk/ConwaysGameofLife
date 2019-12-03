@@ -43,7 +43,7 @@ public class GameView extends JPanel implements MouseListener, MouseMotionListen
                     g.setColor(Color.WHITE);
 
                 g.fillRect((int)(cellWidth*x + 0.5), (int)(cellHeight*y + 0.5),
-                        (int)(cellWidth + 0.5), (int)(cellHeight + 0.5));
+                        (int)(cellWidth + 0.5)+1, (int)(cellHeight + 0.5)+1);
             }
         }
     }

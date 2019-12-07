@@ -84,7 +84,7 @@ public class GameOfLife {
 
         JToggleButton fullscreenButton = new JToggleButton("Fullscreen");
         fullscreenButton.addActionListener(e -> {
-            stepButton.doClick();
+            stopButton.doClick();
             if (fullscreenButton.isSelected()) {
                 frame.setVisible(false);
                 gameView.setPreferredSize(new Dimension(
